@@ -1,0 +1,54 @@
+﻿> Task :gradle:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle:compileKotlin UP-TO-DATE
+> Task :gradle:compileJava NO-SOURCE
+> Task :gradle:compileGroovy NO-SOURCE
+> Task :gradle:pluginDescriptors UP-TO-DATE
+> Task :gradle:processResources UP-TO-DATE
+> Task :gradle:classes UP-TO-DATE
+> Task :gradle:jar UP-TO-DATE
+.\gradlew : 
+At line:1 char:77
++ ... droid Studio\jbr"
+ ; cd android ; .\gradl
+ew assembleDebug 2>&1 |
+ Out-F ...
++                      
+                ~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (:String) [],    
+ RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+FAILURE: Build failed w
+ith an exception.
+
+* Where:
+Build file 'D:\Workshop
+\Flutter\smart_inventor
+y\android\build.gradle.
+kts' line: 27
+
+* What went wrong:
+Cannot run Project.afte
+rEvaluate(Action) when 
+the project is already 
+evaluated.
+
+* Try:
+> Run with --stacktrace
+ option to get the stac
+k trace.
+> Run with --info or --
+debug option to get mor
+e log output.
+> Run with --scan to ge
+t full insights.
+> Get more help at http
+s://help.gradle.org.
+
+BUILD FAILED in 1s
+4 actionable tasks: 4 up-to-date

@@ -1,0 +1,20 @@
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  adaptive_icon_background: "#5C4DB1" # Indigo primary color
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
+
+flutter_native_splash:
+  color: "#5C4DB1" # Indigo primary color
+  image: "assets/splash/splash_logo.png"
+  color_dark: "#141422" # Dark theme background
+  image_dark: "assets/splash/splash_logo_dark.png"
+  android_12:
+    color: "#5C4DB1"
+    image: "assets/splash/splash_logo.png"
+    color_dark: "#141422"
+    image_dark: "assets/splash/splash_logo_dark.png"
+
+# Assets need to be created first!
+# I will use generate_image to create these assets in the next step.
