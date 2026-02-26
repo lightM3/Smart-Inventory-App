@@ -1,0 +1,66 @@
+VARA INVENTORY: Proje Geliştirme Dokümanı1. Mimari Tasarım (The Blueprint)
+Uygulamayı Clean Architecture prensibiyle 3 ana katmana ayıracağız. Bu sayede kodun test edilebilir, modüler ve bakımı kolay olacak.
+Data Layer: API çağrıları (Dio), Yerel Veritabanı (Isar veya Drift - SQLite'dan daha hızlıdır), Model sınıfları ve Mapper'lar.
+Domain Layer: Repository arayüzleri (Interface), Business Logic (Usecases) ve Entity sınıfları. (Hiçbir kütüphane bağımlılığı içermez).
+Presentation Layer: BLoC (State Management), UI Bileşenleri (Atomic Design), Pages.
+2. Teknoloji Stack (The Engine)
+Dil: Dart (Sound Null Safety)
+State Management: BLoC/Cubit (Kurumsal ölçekte en stabil ve öngörülebilir olanıdır).
+Local DB: Isar Database (NoSQL, çok hızlı, Flutter için optimize edilmiş).
+Dependency Injection: Get_it + Injectable.
+Network: Dio (Interceptor ve Error Handling için).
+Scanning: mobile_scanner (Performanslı barkod okuma için).
+Reactive: RxDart (Karmaşık veri akışları için).
+
+3. Veri Modeli ve Veritabanı Şeması
+Envanter yönetiminde veri tutarlılığı her şeydir. İşte temel tablolarımız:
+Tablo (Entity)
+Önemli Alanlar
+İlişki
+Product
+ID, SKU (Barkod), Name, MinStockLevel, CurrentQty, CategoryID
+Many-to-One (Category)
+Category
+ID, Name, Icon, HexColor
+One-to-Many (Products)
+Transaction
+ID, ProductID, Type (In/Out), Quantity, Timestamp, Note
+One-to-Many (History)
+
+4. Kullanıcı Deneyimi (UX) ve Arayüz Akışı
+Profesyonel bir uygulama "az dokunuş, çok iş" prensibiyle çalışmalıdır.
+Dashboard: Toplam stok değeri, kritik seviyedeki ürünler (hızlı aksiyon butonları), son hareketler grafiği.
+Inventory List: Gelişmiş arama, barkod butonu, kategori filtreleri, "Swipe-to-Action" (stok azalt/arttır).
+Product Detail: Hareket geçmişi (Timeline), görsel galeri, stok düzenleme.
+Scanner Mode: Sürekli tarama modu (Continuous scanning) - birden fazla ürünü peş peşe rafa dizerken hız kazandırır.
+5. Geliştirme Standartları (Production-Ready Rules)
+Kod yazarken şu kurallara sadık kalacağız:
+Linter: flutter_lints yerine daha katı olan very_good_analysis paketini kullanacağız.
+Error Handling: Fonksiyonlar hata fırlatmak yerine Either<Failure, Success> (fpdart) döndürecek. Bu sayede UI'da hata durumlarını unutma şansın kalmayacak.
+Theme: Dark/Light Mode desteği en baştan kurulacak (FlexColorScheme öneririm).
+Localization: Tüm metinler S.of(context) yapısıyla (intl) çoklu dil desteğine uygun yazılacak.
+6. Riskler ve Optimizasyon Stratejileri
+Görsel Yönetimi: Ürün fotoğrafları veritabanını şişirmemeli. Fotoğraflar cihazın ApplicationDocumentsDirectory klasöründe saklanacak, DB'de sadece dosya yolu (path) tutulacak.
+Büyük Veri Setleri: Liste ekranlarında ListView.builder ve Pagination (sayfalama) kullanarak bellek kullanımını minimize edeceğiz.
+Eşitleme (Sync): Firebase/Supabase entegrasyonu aşamasında "Last Write Wins" stratejisi ile çakışmaları önleyeceğiz.
+
+
+
+
+Veri Entegrasyon Modülü
+Müşterilerin elindeki mevcut verileri sisteme dahil etmek için iki yönlü bir strateji izleyeceğiz:
+1. Excel/CSV Import (İçeri Aktarma)
+Şablon Sağlama: Kullanıcıya uygulamanın anladığı bir Excel şablonu (Sütunlar: Ürün Adı, Barkod, Stok, Fiyat vb.) sunacağız.
+Mapping (Eşleştirme): Kullanıcı kendi Excel dosyasını yüklediğinde, hangi sütunun hangi veriye karşılık geldiğini seçebilecek (Örn: "Miktar" sütunu -> "Stock Quantity" alanına).
+Validation (Doğrulama): Veriler DB'ye yazılmadan önce; mükerrer barkod var mı, fiyatlar sayısal mı, zorunlu alanlar dolu mu gibi kontroller yapılacak.
+2. Akıllı Çakışma Yönetimi
+Eğer içe aktarılan bir ürün zaten sistemde varsa (aynı Barkod/SKU):
+Üzerine Yaz (Overwrite): Mevcut veriyi güncelle.
+Üzerine Ekle (Append): Mevcut stoğa yeni miktarı ekle.
+Atla (Skip): Mevcut ürüne dokunma.
+
+🛠 Teknik Mimari (Architectural Update)
+Bu özelliği eklemek için teknoloji yığınımıza (Stack) şu kütüphaneleri ekliyoruz:
+file_picker: Cihazdan veya bulut servislerinden (Drive/iCloud) dosya seçmek için.
+excel: Excel dosyalarını (.xlsx) Dart tarafında parse etmek (okumak ve yazmak) için.
+share_plus: Kullanıcıya boş şablon dosyasını gönderebilmek veya raporları paylaşmak için.
